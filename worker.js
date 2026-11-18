@@ -6,7 +6,7 @@ import { EmailMessage } from 'cloudflare:email';
 const TO = 'anaortizevents@gmail.com';
 const FROM = 'inquiries@anaortiz.events';
 const CANONICAL_HOST = 'www.anaortiz.events';
-const LIMITS = { name: 120, quince: 120, email: 200, phone: 40, date: 20, venue: 200, message: 4000 };
+const LIMITS = { type: 20, name: 120, quince: 120, email: 200, phone: 40, date: 20, venue: 200, message: 4000 };
 
 export default {
   async fetch(request, env) {
@@ -45,19 +45,23 @@ async function handleInquiry(request, env) {
     f[key] = String(data[key] ?? '').trim().slice(0, max);
   }
   const missing = ['name', 'email', 'date'].filter((k) => !f[k]);
-  if (missing.length) return json({ error: `Add your ${missing.join(', ')}.` }, 400);
-  if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(f.email)) return json({ error: 'Check the email address.' }, 400);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(f.date)) return json({ error: 'Check the event date.' }, 400);
+  const es = data.lang === 'es';
+  if (missing.length) return json({ error: es ? 'Agrega tu nombre, correo y la fecha del evento.' : `Add your ${missing.join(', ')}.` }, 400);
+  if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(f.email)) return json({ error: es ? 'Revisa tu correo electrónico.' : 'Check the email address.' }, 400);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(f.date)) return json({ error: es ? 'Revisa la fecha del evento.' : 'Check the event date.' }, 400);
 
+  const kind = { wedding: 'Wedding', quinceanera: 'Quinceañera', other: 'Event' }[f.type] || 'Event';
   const prettyDate = new Date(`${f.date}T12:00:00Z`).toLocaleDateString('en-US', { dateStyle: 'long', timeZone: 'UTC' });
   const lines = [
-    'New quinceañera inquiry from anaortiz.events',
+    `New ${kind.toLowerCase()} inquiry from anaortiz.events`,
     '',
     `Name: ${f.name}`,
-    f.quince ? `Quinceañera: ${f.quince}` : null,
+    `Event type: ${kind}`,
+    f.quince ? `Couple / quinceañera: ${f.quince}` : null,
     `Email: ${f.email}`,
     f.phone ? `Phone: ${f.phone}` : null,
     `Event date: ${prettyDate}`,
+    `Language: ${es ? 'Spanish (form submitted from the Spanish site)' : 'English'}`,
     f.venue ? `Venue: ${f.venue}` : null,
     '',
     f.message ? `Message:\n${f.message}` : 'No message.',
@@ -69,7 +73,7 @@ async function handleInquiry(request, env) {
     from: `Ana Ortiz Events Website <${FROM}>`,
     to: TO,
     replyTo: `${sanitizeHeader(f.name)} <${f.email}>`,
-    subject: `Quinceañera inquiry: ${f.name}, ${prettyDate}`,
+    subject: `${kind} inquiry: ${f.name}, ${prettyDate}`,
     text: lines.join('\r\n'),
   });
 

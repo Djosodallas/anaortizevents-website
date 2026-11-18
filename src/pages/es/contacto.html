@@ -1,0 +1,81 @@
+<!--@head title="Contacta a Ana Ortiz, coordinadora de bodas y quince años en Dallas–Fort Worth" description="Consulta la disponibilidad de Ana Ortiz para tu boda o tus quince años. Envía tu fecha y salón, o llama o manda mensaje al 469-970-4473." path="/es/contacto" alt="/contact"-->
+<body>
+<!--@header-->
+<main id="main">
+
+  <section class="page-hero">
+    <div class="wrap">
+      <h1>Consulta la disponibilidad de Ana</h1>
+      <p class="page-lede">Envía tu fecha y tu salón, y Ana te responderá con su disponibilidad y una cotización. ¿Prefieres hablar? Llama o manda mensaje cuando quieras.</p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <div class="wrap contact-grid">
+      <form id="inquiry" class="inquiry" novalidate>
+        <label class="field">
+          <span>Tipo de evento</span>
+          <select name="type" required>
+            <option value="">Elige una opción</option>
+            <option value="wedding">Boda</option>
+            <option value="quinceanera">Quince años</option>
+            <option value="other">Otra celebración</option>
+          </select>
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Tu nombre</span>
+            <input name="name" autocomplete="name" required>
+          </label>
+          <label class="field">
+            <span>Nombre de los novios o de la quinceañera <small>opcional</small></span>
+            <input name="quince">
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field">
+            <span>Correo electrónico</span>
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+          <label class="field">
+            <span>Teléfono <small>opcional</small></span>
+            <input name="phone" type="tel" autocomplete="tel">
+          </label>
+        </div>
+        <div class="field-row">
+          <label class="field">
+            <span>Fecha del evento</span>
+            <input name="date" type="date" required>
+          </label>
+          <label class="field">
+            <span>Salón <small>si ya lo tienen</small></span>
+            <input name="venue">
+          </label>
+        </div>
+        <label class="field">
+          <span>¿Algo que Ana deba saber?</span>
+          <textarea name="message" rows="5"></textarea>
+        </label>
+        <p class="form-error" role="alert" hidden></p>
+        <button class="btn" type="submit">Enviar a Ana</button>
+        <p class="form-hint">Tus datos llegan directo al correo de Ana.</p>
+      </form>
+
+      <aside class="contact-side">
+        <div class="contact-card">
+          <h2>Habla directo con Ana</h2>
+          <a class="contact-line" href="tel:+14699704473"><span>Llamar</span>469-970-4473</a>
+          <a class="contact-line" href="sms:+14699704473"><span>Mensaje</span>469-970-4473</a>
+          <a class="contact-line" href="mailto:anaortizevents@gmail.com"><span>Correo</span>anaortizevents@gmail.com</a>
+        </div>
+        <div class="contact-card contact-card-soft">
+          <h2>Sigue los eventos de Ana</h2>
+          <a class="contact-line" href="https://www.instagram.com/anaortiz_events/" target="_blank" rel="noopener"><span>Instagram</span>@anaortiz_events</a>
+          <a class="contact-line" href="https://www.facebook.com/anaortizevents" target="_blank" rel="noopener"><span>Facebook</span>Ana Ortiz Events</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+<!--@footer-->

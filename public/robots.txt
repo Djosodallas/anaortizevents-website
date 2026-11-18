@@ -1,4 +1,34 @@
+# Search engines and AI assistants are welcome to read and cite this site.
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# Search
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /api/
+
+# AI assistants and answer engines
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Meta-ExternalAgent
+User-agent: CCBot
+User-agent: Amazonbot
+User-agent: DuckAssistBot
+User-agent: MistralAI-User
+Allow: /
+Disallow: /api/
 
 Sitemap: https://www.anaortiz.events/sitemap.xml
+# AI summary: https://www.anaortiz.events/llms.txt

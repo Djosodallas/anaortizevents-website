@@ -1,13 +1,17 @@
 # anaortiz.events
 
-Static site for Ana Ortiz Events (day-of quinceañera coordination, DFW).
+Static site for Ana Ortiz Events (day-of wedding and quinceañera coordination, DFW),
+in English and Mexican Spanish.
 Served by a Cloudflare Worker (static assets only) on the **djosito214** Cloudflare
 account (`d14c810a16769ab0444144e184b8e0c7`).
 
 ## Layout
 
-- `src/pages/*.html` – one file per page (`/`, `/investment`, `/vendors`, `/contact`, 404)
-- `src/partials/` – shared `<head>`, header, footer (expanded by `build.mjs`)
+- `src/pages/*.html` – English pages (`/`, `/investment`, `/vendors`, `/contact`, 404)
+- `src/pages/es/*.html` – Spanish (es-MX) twins (`/es`, `/es/precios`, `/es/proveedores`, `/es/contacto`)
+- `src/blog/en/*.html`, `src/blog/es/*.html` – blog posts; `build.mjs` generates
+  `/blog`, `/es/blog` and each post page. See `src/blog/FORMAT.md`.
+- `src/partials/` – shared `<head>`, header, footer; `*.es.html` are the Spanish versions
 - `public/` – CSS, JS, images, `_redirects`, `robots.txt` (copied as-is)
 - `dist/` – build output (git-ignored)
 
@@ -15,6 +19,17 @@ Adding a preferred vendor: copy an `<article class="vendor">` block in
 `src/pages/vendors.html` into the right service section (or add a new
 `<section class="service">` and a matching jump link), and add it to the
 ItemList JSON-LD at the bottom of that page.
+
+## Two languages
+
+Every page and post has a twin in the other language, linked through the `alt`
+attribute in its `<!--@head ...-->` line (posts: `alt:` in the `<!--@post` header).
+The build adds `hreflang` tags, the header language switch and sitemap
+alternates from it, and **fails if a twin is missing**. Spanish copy is
+Mexican Spanish and uses "tú" for one reader and "ustedes" for a couple or family.
+
+Adding a blog post: write `src/blog/en/<slug>.html` and `src/blog/es/<slug>.html`
+following `src/blog/FORMAT.md`, each pointing at the other with `alt:`.
 
 ## Commands
 
@@ -26,12 +41,13 @@ npm run deploy   # build + deploy to Cloudflare
 
 ## Contact form
 
-`/contact` posts to `POST /api/inquiry` (worker.js), which emails
+`/contact` and `/es/contacto` post to `POST /api/inquiry` (worker.js), which emails
 anaortizevents@gmail.com from `inquiries@anaortiz.events` with Reply-To set to
 the visitor. It uses the `INQUIRY_EMAIL` send_email binding (Cloudflare Email
 Routing on anaortiz.events; the Gmail destination is verified). Spam traps: a
 hidden `company` field and a 3-second minimum fill time. If sending fails, the
-form offers a pre-filled mailto link instead.
+form offers a pre-filled mailto link instead. The email notes the event type
+(wedding, quinceañera or other) and whether it came from the Spanish site.
 
 ## Domain and DNS (done 2026-11-18)
 

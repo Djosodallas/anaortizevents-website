@@ -1,24 +1,37 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="{{htmllang}}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{title}}</title>
 <meta name="description" content="{{description}}">
 <link rel="canonical" href="{{canonical}}">
+{{alternates}}
 {{robots}}
-<meta property="og:type" content="website">
 <meta property="og:site_name" content="Ana Ortiz Events">
+<meta property="og:locale" content="{{oglocale}}">
 <meta property="og:title" content="{{title}}">
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="{{canonical}}">
-<meta property="og:image" content="https://www.anaortiz.events/images/hero-1600.webp">
+<meta property="og:type" content="{{ogtype}}">
+{{oglocalealt}}
+<meta property="og:image" content="https://www.anaortiz.events/images/og-1200x630.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ogimagealt}}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{title}}">
+<meta name="twitter:description" content="{{description}}">
+<meta name="twitter:image" content="https://www.anaortiz.events/images/og-1200x630.jpg">
 <meta name="theme-color" content="#2b1433">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="{{feedtitle}}" href="{{feedurl}}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 <script src="/main.js" defer></script>
+{{schema}}
+{{extra}}
 </head>

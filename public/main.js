@@ -1,3 +1,24 @@
+const ES = (document.documentElement.lang || '').startsWith('es');
+const L = ES ? {
+  close: 'Cerrar', menu: 'Menú', sending: 'Enviando…', send: 'Enviar a Ana',
+  missing: (m) => `Agrega ${m} para que Ana pueda revisar su agenda.`,
+  and: ', ',
+  thanks: (n) => `¡Enviado! Gracias, ${n}.`,
+  got: (e) => `Ana ya tiene tus datos y te responderá a ${e} con su disponibilidad y una cotización. ¿La necesitas antes? Llama o manda mensaje al 469-970-4473.`,
+  failed: 'Tu mensaje no se envió. <a href="#" class="mailto-fallback">Envíalo desde tu app de correo</a> o llama al 469-970-4473.',
+  locale: 'es-MX',
+  f: { name: 'Nombre', type: 'Tipo de evento', quince: 'Novios / quinceañera', email: 'Correo', phone: 'Teléfono', date: 'Fecha del evento', venue: 'Salón', subject: 'Consulta de evento' },
+} : {
+  close: 'Close', menu: 'Menu', sending: 'Sending…', send: 'Send to Ana',
+  missing: (m) => `Add your ${m} so Ana can check her calendar.`,
+  and: ', ',
+  thanks: (n) => `Sent. Thank you, ${n}!`,
+  got: (e) => `Ana has your details and will get back to you at ${e} with availability and pricing. Need her sooner? Call or text 469-970-4473.`,
+  failed: 'Your message didn’t go through. <a href="#" class="mailto-fallback">Send it from your email app instead</a> or call 469-970-4473.',
+  locale: 'en-US',
+  f: { name: 'Name', type: 'Event type', quince: 'Couple / quinceañera', email: 'Email', phone: 'Phone', date: 'Event date', venue: 'Venue', subject: 'Event inquiry' },
+};
+
 // Mobile menu
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.getElementById('site-nav');
@@ -5,7 +26,7 @@ if (toggle && nav) {
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.textContent = open ? 'Close' : 'Menu';
+    toggle.textContent = open ? (toggle.dataset.open || L.close) : (toggle.dataset.closed || L.menu);
   });
 }
 
@@ -21,10 +42,13 @@ if (form) {
     form.querySelectorAll('[required]').forEach((input) => {
       const bad = !input.value.trim() || (input.type === 'email' && !input.checkValidity());
       input.setAttribute('aria-invalid', String(bad));
-      if (bad) missing.push(input.closest('.field').querySelector('span').firstChild.textContent.trim().toLowerCase());
+      if (bad) {
+        const label = input.closest('.field').querySelector('span').firstChild.textContent.trim();
+        missing.push(ES ? ({ email: 'tu correo', date: 'la fecha del evento', type: 'el tipo de evento' }[input.name] || 'tu nombre') : label.toLowerCase());
+      }
     });
     if (missing.length) {
-      error.textContent = `Add your ${missing.join(', ')} so Ana can check her calendar.`;
+      error.textContent = L.missing(missing.join(L.and));
       error.hidden = false;
       form.querySelector('[aria-invalid="true"]').focus();
       return;
@@ -33,16 +57,16 @@ if (form) {
     const d = Object.fromEntries(new FormData(form));
     const button = form.querySelector('button[type="submit"]');
     button.disabled = true;
-    button.textContent = 'Sending…';
+    button.textContent = L.sending;
     try {
       const res = await fetch('/api/inquiry', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ ...d, elapsed: Date.now() - started }),
+        body: JSON.stringify({ ...d, lang: ES ? 'es' : 'en', elapsed: Date.now() - started }),
       });
       const out = await res.json().catch(() => ({}));
       if (res.ok && out.ok) {
-        form.innerHTML = `<div class="form-success" role="status" tabindex="-1"><h2>Sent. Thank you, ${escapeHtml(d.name.split(' ')[0])}!</h2><p>Ana has your details and will get back to you at ${escapeHtml(d.email)} with availability and pricing. Need her sooner? Call or text 469-970-4473.</p></div>`;
+        form.innerHTML = `<div class="form-success" role="status" tabindex="-1"><h2>${L.thanks(escapeHtml(d.name.split(' ')[0]))}</h2><p>${L.got(escapeHtml(d.email))}</p></div>`;
         form.querySelector('.form-success').focus();
         return;
       }
@@ -50,26 +74,27 @@ if (form) {
         error.textContent = out.error;
         error.hidden = false;
         button.disabled = false;
-        button.textContent = 'Send to Ana';
+        button.textContent = L.send;
         return;
       }
     } catch {}
     button.disabled = false;
-    button.textContent = 'Send to Ana';
-    error.innerHTML = 'Your message didn’t go through. <a href="#" class="mailto-fallback">Send it from your email app instead</a> or call 469-970-4473.';
+    button.textContent = L.send;
+    error.innerHTML = L.failed;
     error.hidden = false;
-    const date = d.date ? new Date(d.date + 'T12:00').toLocaleDateString('en-US', { dateStyle: 'long' }) : '';
+    const date = d.date ? new Date(d.date + 'T12:00').toLocaleDateString(L.locale, { dateStyle: 'long' }) : '';
     const lines = [
-      `Name: ${d.name}`,
-      d.quince ? `Quinceañera: ${d.quince}` : null,
-      `Email: ${d.email}`,
-      d.phone ? `Phone: ${d.phone}` : null,
-      `Event date: ${date}`,
-      d.venue ? `Venue: ${d.venue}` : null,
+      `${L.f.name}: ${d.name}`,
+      d.type ? `${L.f.type}: ${form.querySelector('[name=type] option:checked').textContent}` : null,
+      d.quince ? `${L.f.quince}: ${d.quince}` : null,
+      `${L.f.email}: ${d.email}`,
+      d.phone ? `${L.f.phone}: ${d.phone}` : null,
+      `${L.f.date}: ${date}`,
+      d.venue ? `${L.f.venue}: ${d.venue}` : null,
     ].filter(Boolean);
     if (d.message) lines.push('', d.message);
     const body = lines.join('\n');
-    const subject = `Quinceañera inquiry: ${date}`;
+    const subject = `${L.f.subject}: ${date}`;
     error.querySelector('.mailto-fallback').href = `mailto:anaortizevents@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }
