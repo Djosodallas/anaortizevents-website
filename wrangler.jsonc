@@ -1,0 +1,18 @@
+{
+  "name": "anaortiz-events",
+  // djosito214 Cloudflare account
+  "account_id": "d14c810a16769ab0444144e184b8e0c7",
+  "compatibility_date": "2026-11-01",
+  "main": "worker.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    // Serve /investment, /contact, /vendors (same URLs as the old Squarespace site)
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  }
+  // Added once anaortiz.events is active on Cloudflare:
+  // "send_email": [{ "name": "INQUIRY_EMAIL", "destination_address": "anaortizevents@gmail.com" }],
+  // "routes": [{ "pattern": "www.anaortiz.events", "custom_domain": true }, { "pattern": "anaortiz.events", "custom_domain": true }]
+}
