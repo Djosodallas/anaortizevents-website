@@ -44,4 +44,7 @@ form offers a pre-filled mailto link instead.
 - Squarespace A/CNAME records were removed. Email Routing added MX
   (route1–3.mx.cloudflare.net), DKIM (`cf2024-1._domainkey`) and SPF
   (`v=spf1 include:_spf.mx.cloudflare.net ~all`), replacing the old `v=spf1 -all`.
+- The Worker is reachable only through anaortiz.events: `workers_dev` and
+  `preview_urls` are off (the old `*.workers.dev` URL returns error 1042), and
+  worker.js 301s any host other than `www.anaortiz.events` to it (localhost excepted).
 - Any future domain purchase or transfer for Ana goes into the djosito214 account.

@@ -5,14 +5,19 @@ import { EmailMessage } from 'cloudflare:email';
 
 const TO = 'anaortizevents@gmail.com';
 const FROM = 'inquiries@anaortiz.events';
+const CANONICAL_HOST = 'www.anaortiz.events';
 const LIMITS = { name: 120, quince: 120, email: 200, phone: 40, date: 20, venue: 200, message: 4000 };
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    // One canonical host, matching the old site: anaortiz.events → www.anaortiz.events
-    if (url.hostname === 'anaortiz.events') {
-      url.hostname = 'www.anaortiz.events';
+    // One canonical host: anything that isn't www.anaortiz.events (the bare domain,
+    // or any other hostname that reaches this Worker) is sent to www with a 301.
+    const local = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+    if (url.hostname !== CANONICAL_HOST && !local) {
+      url.hostname = CANONICAL_HOST;
+      url.protocol = 'https:';
+      url.port = '';
       return Response.redirect(url.toString(), 301);
     }
     if (url.pathname === '/api/inquiry') {

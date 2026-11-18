@@ -4,6 +4,10 @@
   "account_id": "d14c810a16769ab0444144e184b8e0c7",
   "compatibility_date": "2026-11-01",
   "main": "worker.js",
+  // Only reachable through anaortiz.events: no *.workers.dev URL and no
+  // per-version preview URLs (worker.js also 301s any other host to www).
+  "workers_dev": false,
+  "preview_urls": false,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
