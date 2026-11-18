@@ -256,6 +256,10 @@ p { margin: 0 0 1em; }
   background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--rosa);
   border-radius: 4px 12px 12px 4px; padding: clamp(24px, 4vw, 40px);
 }
+.vendor-logo { display: block; width: auto; margin: 0 0 18px; }
+.vendor-logo-dj { height: 92px; margin-left: -6px; }
+.vendor-logo-ndp { height: 58px; }
+@media (max-width: 700px) { .vendor-logo-dj { height: 76px; } .vendor-logo-ndp { height: 48px; } }
 .vendor h3 { font-size: clamp(1.7rem, 3vw, 2.2rem); margin-bottom: 4px; }
 .vendor-area { color: var(--rosa-deep); font-weight: 500; font-size: .98rem; }
 .vendor-main p:not(.vendor-area) { color: #4a3350; max-width: 44em; }
