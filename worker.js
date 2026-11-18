@@ -10,6 +10,11 @@ const LIMITS = { name: 120, quince: 120, email: 200, phone: 40, date: 20, venue:
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // One canonical host, matching the old site: anaortiz.events → www.anaortiz.events
+    if (url.hostname === 'anaortiz.events') {
+      url.hostname = 'www.anaortiz.events';
+      return Response.redirect(url.toString(), 301);
+    }
     if (url.pathname === '/api/inquiry') {
       if (request.method !== 'POST') return json({ error: 'Use POST.' }, 405);
       return handleInquiry(request, env);

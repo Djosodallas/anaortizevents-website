@@ -10,9 +10,14 @@
     // Serve /investment, /contact, /vendors (same URLs as the old Squarespace site)
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
-  }
-  // Added once anaortiz.events is active on Cloudflare:
-  // "send_email": [{ "name": "INQUIRY_EMAIL", "destination_address": "anaortizevents@gmail.com" }],
-  // "routes": [{ "pattern": "www.anaortiz.events", "custom_domain": true }, { "pattern": "anaortiz.events", "custom_domain": true }]
+    // Worker runs first so it can 301 anaortiz.events → www and handle /api/inquiry
+    "run_worker_first": true
+  },
+  // Custom domains anaortiz.events + www.anaortiz.events are attached to this Worker
+  // in the dashboard (Workers → anaortiz-events → Domains); wrangler's OAuth token
+  // can't create their DNS records, so they're not listed here.
+  // Contact form → Ana's inbox via Email Routing on anaortiz.events (destination verified).
+  "send_email": [
+    { "name": "INQUIRY_EMAIL", "destination_address": "anaortizevents@gmail.com" }
+  ]
 }

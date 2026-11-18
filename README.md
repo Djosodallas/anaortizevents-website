@@ -26,31 +26,22 @@ npm run deploy   # build + deploy to Cloudflare
 
 ## Contact form
 
-There is no backend yet. The form validates, then opens the visitor's email
-app pre-filled to anaortizevents@gmail.com. Once DNS is on Cloudflare this
-can become a Worker endpoint that emails Ana directly.
+`/contact` posts to `POST /api/inquiry` (worker.js), which emails
+anaortizevents@gmail.com from `inquiries@anaortiz.events` with Reply-To set to
+the visitor. It uses the `INQUIRY_EMAIL` send_email binding (Cloudflare Email
+Routing on anaortiz.events; the Gmail destination is verified). Spam traps: a
+hidden `company` field and a 3-second minimum fill time. If sending fails, the
+form offers a pre-filled mailto link instead.
 
-## DNS move to Cloudflare (next step)
+## Domain and DNS (done 2026-11-18)
 
-Current state (checked 2026-11-18): nameservers are NS1 (`dns1–4.p01.nsone.net`,
-Squarespace Domains). Records in use:
-
-| Name | Type | Value | After the move |
-| --- | --- | --- | --- |
-| `anaortiz.events` | A ×4 | Squarespace IPs | Replaced by Worker custom domain |
-| `www` | CNAME | `ext-sq.squarespace.com` | Replaced by Worker custom domain |
-| `anaortiz.events` | TXT | `v=spf1 -all` | Keep (no email is sent from this domain) |
-
-No MX records: Ana's email is Gmail, so nothing email-related moves.
-
-Steps:
-1. djosito214 dashboard → Add a domain → `anaortiz.events` (Free plan).
-   Let it import records; delete the Squarespace A/CNAME records, keep the SPF TXT.
-2. At Squarespace Domains → DNS → Nameservers → use custom nameservers →
-   enter the two Cloudflare nameservers Cloudflare shows.
-3. When the zone is Active, uncomment the `routes` block in `wrangler.jsonc`
-   and `npm run deploy` (creates `anaortiz.events` and `www.anaortiz.events`).
-4. Add a redirect rule so `anaortiz.events` → `https://www.anaortiz.events`
-   (www is the canonical host, matching the old site).
-5. Cancel the Squarespace website plan only after the new site is live
-   (keep the domain registration until it's transferred or renewed).
+- Registrar: GoDaddy. Nameservers changed there to
+  `adel.ns.cloudflare.com` / `louis.ns.cloudflare.com`; DNSSEC off.
+- Zone `anaortiz.events` is active on the djosito214 Cloudflare account (Free plan).
+- Custom domains `anaortiz.events` and `www.anaortiz.events` are attached to the
+  Worker in the dashboard (Workers → anaortiz-events → Domains). worker.js
+  301-redirects the bare domain to `https://www.anaortiz.events` (canonical host).
+- Squarespace A/CNAME records were removed. Email Routing added MX
+  (route1–3.mx.cloudflare.net), DKIM (`cf2024-1._domainkey`) and SPF
+  (`v=spf1 include:_spf.mx.cloudflare.net ~all`), replacing the old `v=spf1 -all`.
+- Any future domain purchase or transfer for Ana goes into the djosito214 account.
