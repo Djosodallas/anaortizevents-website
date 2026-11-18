@@ -7,6 +7,7 @@
 //         (format in src/blog/FORMAT.md). Index pages /blog and /es/blog are generated.
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync, cpSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
+import { createHash } from 'node:crypto';
 
 const SITE = 'https://www.anaortiz.events';
 const root = new URL('.', import.meta.url).pathname;
@@ -26,9 +27,14 @@ const T = {
     blogLede: 'Practical advice for planning a wedding or quinceañera in Dallas–Fort Worth, from timelines and budgets to traditions and day-of details.',
     readPost: 'Read the article',
     back: 'All articles',
-    ctaH: 'Ready to enjoy the moment you planned for?',
-    ctaP: 'Tell Ana your date and venue. She’ll get back to you with availability and pricing.',
-    ctaBtn: 'Contact us today',
+    ctaH: 'Book your event coordinator today.',
+    ctaTag: 'You planned it. Now enjoy it.',
+    ctaP: 'Ana runs the timeline, the vendors and the wedding party or court, so you get to live every moment of your wedding or quinceañera. Now booking 2026–2027 in Dallas–Fort Worth.',
+    ctaBtn: 'Check my date',
+    ctaCall: 'Call or text 469-970-4473',
+    midH: 'You celebrate. Ana handles the rest.',
+    midP: 'From the first vendor arrival to the last dance, your day-of coordinator keeps everything on time so you never have to look at the clock.',
+    midBtn: 'Book your coordinator',
     contact: '/contact',
     by: 'By Ana Ortiz, day-of event coordinator',
   },
@@ -39,9 +45,14 @@ const T = {
     blogLede: 'Consejos prácticos para planear una boda o unos quince años en Dallas–Fort Worth, desde el itinerario y el presupuesto hasta las tradiciones y los detalles del día.',
     readPost: 'Leer el artículo',
     back: 'Todos los artículos',
-    ctaH: '¿Listos para disfrutar el momento que tanto planearon?',
-    ctaP: 'Cuéntale a Ana la fecha y el salón. Ella te responde con su disponibilidad y precios.',
-    ctaBtn: 'Contáctanos hoy',
+    ctaH: 'Reserva hoy a tu coordinadora de eventos.',
+    ctaTag: 'Ustedes lo planearon. Ahora disfrútenlo.',
+    ctaP: 'Ana se encarga del itinerario, los proveedores y el cortejo o la corte, para que ustedes vivan cada momento de su boda o sus quince años. Agenda abierta 2026–2027 en Dallas–Fort Worth.',
+    ctaBtn: 'Consultar mi fecha',
+    ctaCall: 'Llama o manda mensaje al 469-970-4473',
+    midH: 'Ustedes celebran. Ana se encarga del resto.',
+    midP: 'Desde que llega el primer proveedor hasta el último baile, su coordinadora del día mantiene todo a tiempo para que ustedes nunca tengan que ver el reloj.',
+    midBtn: 'Reservar a mi coordinadora',
     contact: '/es/contacto',
     by: 'Por Ana Ortiz, coordinadora de eventos del día',
   },
@@ -112,6 +123,10 @@ const crumbs = (items) => ({
   itemListElement: items.map(([name, path], i) => ({ '@type': 'ListItem', position: i + 1, name, item: SITE + (path === '/' ? '/' : path) })),
 });
 
+// Cache-busting: asset links carry a hash of the file, so a deploy never pairs new HTML with old CSS/JS.
+const ver = (f) => createHash('sha1').update(readFileSync(join(root, 'public', f))).digest('hex').slice(0, 10);
+const ASSET_V = { css: ver('styles.css'), js: ver('main.js') };
+
 function head(lang, { title, description, path, alt, noindex, extra = '', ogtype = 'website', graph = [] }) {
   const L = LANGS[lang];
   const canonical = SITE + (path === '/' ? '/' : path);
@@ -127,6 +142,8 @@ function head(lang, { title, description, path, alt, noindex, extra = '', ogtype
     ].join('\n');
   }
   return read('src/partials/head.html')
+    .replace('href="/styles.css"', `href="/styles.css?v=${ASSET_V.css}"`)
+    .replace('src="/main.js"', `src="/main.js?v=${ASSET_V.js}"`)
     .replace('{{htmllang}}', L.html)
     .replaceAll('{{title}}', esc(title))
     .replaceAll('{{description}}', esc(description))
@@ -143,23 +160,18 @@ function head(lang, { title, description, path, alt, noindex, extra = '', ogtype
     .replace('{{extra}}', extra);
 }
 
-// Language pill: [US EN | MX ES], current language highlighted, other one links to this page's twin.
+// Language switch (same pattern as newdawnphoto.com): one outlined pill that links to this
+// page's twin, showing the other language's flag and name.
 const FLAG = {
-  en: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect width="16" height="16" fill="#b22234"/>${[1, 3, 5, 7, 9, 11]
-    .map((i) => `<rect y="${(i * 16 / 13).toFixed(2)}" width="16" height="${(16 / 13).toFixed(2)}" fill="#fff"/>`)
-    .join('')}<rect width="7.4" height="8.62" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.6" cy="1.6" r=".55"/><circle cx="3.7" cy="1.6" r=".55"/><circle cx="5.8" cy="1.6" r=".55"/><circle cx="2.65" cy="3.4" r=".55"/><circle cx="4.75" cy="3.4" r=".55"/><circle cx="1.6" cy="5.2" r=".55"/><circle cx="3.7" cy="5.2" r=".55"/><circle cx="5.8" cy="5.2" r=".55"/><circle cx="2.65" cy="7" r=".55"/><circle cx="4.75" cy="7" r=".55"/></g></svg>`,
-  es: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect width="5.34" height="16" fill="#006847"/><rect x="5.33" width="5.34" height="16" fill="#fff"/><rect x="10.66" width="5.34" height="16" fill="#ce1126"/><circle cx="8" cy="8" r="1.9" fill="#8c5a2b"/><path d="M6.2 9.2c.6.9 3 .9 3.6 0" stroke="#006847" stroke-width=".7" fill="none"/></svg>`,
+  en: `<svg class="lang-flag" viewBox="0 0 20 14" width="18" height="13" aria-hidden="true" focusable="false"><rect width="20" height="14" fill="#b22234"/>${[1, 3, 5, 7, 9, 11]
+    .map((i) => `<rect y="${(i * 14 / 13).toFixed(2)}" width="20" height="${(14 / 13).toFixed(2)}" fill="#fff"/>`)
+    .join('')}<rect width="8.6" height="7.54" fill="#3c3b6e"/></svg>`,
+  es: `<svg class="lang-flag" viewBox="0 0 20 14" width="18" height="13" aria-hidden="true" focusable="false"><rect width="20" height="14" fill="#fff"/><rect width="6.67" height="14" fill="#006847"/><rect width="6.67" height="14" x="13.33" fill="#ce1126"/><circle cx="10" cy="7" r="2" fill="none" stroke="#8f6b3a" stroke-width="1.1"/></svg>`,
 };
 function langPill(lang, otherHref) {
-  const opt = (l) => {
-    const code = l === 'en' ? 'EN' : 'ES';
-    const name = l === 'en' ? 'English' : 'Español';
-    const inner = `<span class="flag">${FLAG[l]}</span>${code}`;
-    return l === lang
-      ? `<span class="lang-opt is-current" lang="${LANGS[l].html}" aria-label="${name}" aria-current="true">${inner}</span>`
-      : `<a class="lang-opt" href="${otherHref}" hreflang="${LANGS[l].html}" lang="${LANGS[l].html}" aria-label="${name}">${inner}</a>`;
-  };
-  return `<div class="lang-pill" role="group" aria-label="${lang === 'es' ? 'Idioma' : 'Language'}">${opt('en')}${opt('es')}</div>`;
+  const other = lang === 'en' ? 'es' : 'en';
+  const name = other === 'es' ? 'Español' : 'English';
+  return `<a class="lang-switch" href="${otherHref}" rel="alternate" hreflang="${LANGS[other].html}" lang="${LANGS[other].html}">${FLAG[other]}${name}</a>`;
 }
 
 function header(lang, nav, alt) {
@@ -226,6 +238,21 @@ function parsePost(lang, file) {
   return { ...meta, slug, lang, path: `${LANGS[lang].prefix}/blog/${slug}`, body: raw.slice(m[0].length).trim() };
 }
 
+// Puts a booking callout before the middle H2 of a post.
+function withMidCta(body, t) {
+  const parts = body.split(/(?=<h2>)/);
+  if (parts.length < 4) return body;
+  const at = Math.floor(parts.length / 2);
+  const box = `<aside class="mid-cta" aria-label="${t.midBtn}">
+  <p class="mid-cta-h">${t.midH}</p>
+  <p>${t.midP}</p>
+  <a class="btn" href="${t.contact}#inquiry">${t.midBtn}</a>
+</aside>
+`;
+  parts.splice(at, 0, box);
+  return parts.join('');
+}
+
 const fmtDate = (lang, d) =>
   new Date(`${d}T12:00:00Z`).toLocaleDateString(LANGS[lang].date, { dateStyle: 'long', timeZone: 'UTC' });
 
@@ -280,14 +307,18 @@ ${header(lang, 'blog', p.alt)}
       </div>
     </header>
     <div class="wrap narrow post-body">
-${p.body}
+${withMidCta(p.body, t)}
     </div>
   </article>
   <section class="post-cta">
     <div class="wrap narrow">
+      <p class="post-cta-tag">${t.ctaTag}</p>
       <h2>${t.ctaH}</h2>
       <p>${t.ctaP}</p>
-      <a class="btn" href="${t.contact}#inquiry">${t.ctaBtn}</a>
+      <div class="post-cta-actions">
+        <a class="btn btn-big" href="${t.contact}#inquiry">${t.ctaBtn}</a>
+        <a class="btn btn-ghost-light" href="sms:+14699704473">${t.ctaCall}</a>
+      </div>
     </div>
   </section>
 </main>
