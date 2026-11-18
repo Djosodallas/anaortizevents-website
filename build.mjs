@@ -143,12 +143,31 @@ function head(lang, { title, description, path, alt, noindex, extra = '', ogtype
     .replace('{{extra}}', extra);
 }
 
+// Language pill: [US EN | MX ES], current language highlighted, other one links to this page's twin.
+const FLAG = {
+  en: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect width="16" height="16" fill="#b22234"/>${[1, 3, 5, 7, 9, 11]
+    .map((i) => `<rect y="${(i * 16 / 13).toFixed(2)}" width="16" height="${(16 / 13).toFixed(2)}" fill="#fff"/>`)
+    .join('')}<rect width="7.4" height="8.62" fill="#3c3b6e"/><g fill="#fff"><circle cx="1.6" cy="1.6" r=".55"/><circle cx="3.7" cy="1.6" r=".55"/><circle cx="5.8" cy="1.6" r=".55"/><circle cx="2.65" cy="3.4" r=".55"/><circle cx="4.75" cy="3.4" r=".55"/><circle cx="1.6" cy="5.2" r=".55"/><circle cx="3.7" cy="5.2" r=".55"/><circle cx="5.8" cy="5.2" r=".55"/><circle cx="2.65" cy="7" r=".55"/><circle cx="4.75" cy="7" r=".55"/></g></svg>`,
+  es: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect width="5.34" height="16" fill="#006847"/><rect x="5.33" width="5.34" height="16" fill="#fff"/><rect x="10.66" width="5.34" height="16" fill="#ce1126"/><circle cx="8" cy="8" r="1.9" fill="#8c5a2b"/><path d="M6.2 9.2c.6.9 3 .9 3.6 0" stroke="#006847" stroke-width=".7" fill="none"/></svg>`,
+};
+function langPill(lang, otherHref) {
+  const opt = (l) => {
+    const code = l === 'en' ? 'EN' : 'ES';
+    const name = l === 'en' ? 'English' : 'Español';
+    const inner = `<span class="flag">${FLAG[l]}</span>${code}`;
+    return l === lang
+      ? `<span class="lang-opt is-current" lang="${LANGS[l].html}" aria-label="${name}" aria-current="true">${inner}</span>`
+      : `<a class="lang-opt" href="${otherHref}" hreflang="${LANGS[l].html}" lang="${LANGS[l].html}" aria-label="${name}">${inner}</a>`;
+  };
+  return `<div class="lang-pill" role="group" aria-label="${lang === 'es' ? 'Idioma' : 'Language'}">${opt('en')}${opt('es')}</div>`;
+}
+
 function header(lang, nav, alt) {
   const L = LANGS[lang];
   const switchTo = alt || (lang === 'en' ? '/es' : '/');
   return read(`src/partials/header${L.partials}.html`)
     .replace(`data-nav="${nav}"`, `data-nav="${nav}" aria-current="page"`)
-    .replace('{{langswitch}}', switchTo);
+    .replace('{{langpill}}', langPill(lang, switchTo));
 }
 const footer = (lang) =>
   read(`src/partials/footer${LANGS[lang].partials}.html`).replace('{{year}}', String(new Date().getFullYear()));

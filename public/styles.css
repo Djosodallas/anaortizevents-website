@@ -75,8 +75,16 @@ p { margin: 0 0 1em; }
 .site-nav a:not(.btn) { text-decoration: none; font-weight: 500; font-size: .98rem; padding: 6px 0; border-bottom: 2px solid transparent; }
 .site-nav a:not(.btn):hover, .site-nav a[aria-current="page"] { border-bottom-color: var(--rosa); }
 .menu-toggle { display: none; }
-.site-nav .lang-switch { font-size: .9rem; color: var(--muted); padding-left: 20px; border-left: 1px solid var(--line); border-bottom-color: transparent; }
-.site-nav .lang-switch:hover { color: var(--rosa-deep); }
+.lang-pill { display: inline-flex; align-items: center; gap: 2px; padding: 3px; background: #fff; border: 1px solid var(--line); border-radius: 999px; }
+.site-nav .lang-pill .lang-opt {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 5px; border: 0; border-radius: 999px;
+  font: 600 .8rem/1 var(--sans); letter-spacing: .04em; color: var(--muted); text-decoration: none;
+}
+.site-nav .lang-pill .lang-opt.is-current { background: var(--plum); color: #fff; }
+.site-nav .lang-pill a.lang-opt:hover { background: var(--blush); color: var(--plum); }
+.site-nav .lang-pill a.lang-opt:focus-visible { outline: 2px solid var(--rosa); outline-offset: 1px; }
+.lang-opt .flag { width: 18px; height: 18px; border-radius: 50%; overflow: hidden; flex: none; box-shadow: 0 0 0 1px rgba(43,20,51,.15); }
+.lang-opt .flag svg { display: block; width: 100%; height: 100%; }
 @media (max-width: 1120px) and (min-width: 1021px) { .site-nav { gap: 20px; } }
 
 @media (max-width: 1020px) {
@@ -95,7 +103,8 @@ p { margin: 0 0 1em; }
   .site-nav a:not(.btn) { padding: 14px 0; border-bottom: 1px solid var(--line); }
   .site-nav a[aria-current="page"] { color: var(--rosa-deep); border-bottom-color: var(--line); }
   .site-nav .btn { margin-top: 16px; }
-  .site-nav .lang-switch { padding-left: 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .site-nav .lang-pill { align-self: flex-start; margin-top: 16px; }
+  .site-nav .lang-pill .lang-opt { padding: 8px 14px 8px 8px; font-size: .9rem; }
   .brand-name { font-size: 1.15rem; }
   .brand img { width: 40px; height: 40px; }
 }
