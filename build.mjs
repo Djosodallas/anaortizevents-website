@@ -190,11 +190,49 @@ function write(path, html) {
   writeFileSync(out, html);
 }
 
+// ---------- Reviews and gallery (src/data/*.json) ----------
+// Each renders only when it has entries, so an empty file leaves no trace on the site.
+// Pages opt in with <!--@reviews:all|wedding|quinceanera--> and <!--@gallery:wedding|quinceanera-->.
+const loadJSON = (p) => (existsSync(join(root, p)) ? JSON.parse(read(p)) : []);
+const REVIEWS = loadJSON('src/data/reviews.json');
+const GALLERY = loadJSON('src/data/gallery.json');
+const RL = {
+  en: { h: 'What families say', wedding: 'Wedding', quinceanera: 'Quinceañera', gh: { wedding: 'Weddings Ana has coordinated', quinceanera: 'Quinceañeras Ana has coordinated' } },
+  es: { h: 'Lo que dicen las familias', wedding: 'Boda', quinceanera: 'Quince años', gh: { wedding: 'Bodas que Ana ha coordinado', quinceanera: 'Quinceañeras que Ana ha coordinado' } },
+};
+function reviewsBlock(lang, kind) {
+  const list = REVIEWS.filter((r) => r.text && r.name && (kind === 'all' || r.event === kind));
+  if (!list.length) return '';
+  const t = RL[lang];
+  const items = list
+    .map((r) => {
+      const meta = [r.event && t[r.event], r.source].filter(Boolean).map(esc).join(', ');
+      return `<figure class="review"><blockquote${r.lang && r.lang !== lang ? ` lang="${r.lang === 'es' ? 'es-MX' : 'en-US'}"` : ''}><p>${esc(r.text)}</p></blockquote><figcaption><span class="review-name">${esc(r.name)}</span>${meta ? `<span class="review-meta">${meta}</span>` : ''}</figcaption></figure>`;
+    })
+    .join('\n');
+  return `<section class="reviews"><div class="wrap"><h2 class="section-title">${t.h}</h2><div class="review-grid">${items}</div></div></section>`;
+}
+function galleryBlock(lang, kind) {
+  const list = GALLERY.filter((g) => g.src && g.event === kind);
+  if (!list.length) return '';
+  const items = list
+    .map((g) => {
+      const alt = typeof g.alt === 'object' ? g.alt[lang] || g.alt.en || '' : g.alt || '';
+      return `<figure class="gallery-item"><img src="${esc(g.src)}"${g.width ? ` width="${g.width}"` : ''}${g.height ? ` height="${g.height}"` : ''} alt="${esc(alt)}" loading="lazy" decoding="async"></figure>`;
+    })
+    .join('\n');
+  return `<section class="gallery"><div class="wrap"><h2 class="section-title">${RL[lang].gh[kind]}</h2><div class="gallery-grid">${items}</div></div></section>`;
+}
+const withBlocks = (html, lang) =>
+  html
+    .replace(/<!--@reviews:(\w+)-->/g, (_, k) => reviewsBlock(lang, k))
+    .replace(/<!--@gallery:(\w+)-->/g, (_, k) => galleryBlock(lang, k));
+
 // ---------- Pages ----------
 for (const lang of ['en', 'es']) {
   const dir = lang === 'en' ? 'src/pages' : 'src/pages/es';
   for (const file of readdirSync(join(root, dir)).filter((f) => f.endsWith('.html'))) {
-    let html = read(`${dir}/${file}`);
+    let html = withBlocks(read(`${dir}/${file}`), lang);
     const nav = file.replace('.html', '');
     const m = html.match(/<!--@head (.*?)-->/s);
     const a = Object.fromEntries([...m[1].matchAll(/(\w+)="([^"]*)"/g)].map((x) => [x[1], x[2].replace(/&amp;/g, '&')]));

@@ -473,3 +473,36 @@ p { margin: 0 0 1em; }
 .post-body .mid-cta p:not(.mid-cta-h) { color: #f1e3ea; margin: 0 0 22px; }
 .post-body .mid-cta .btn { position: relative; color: #fff; text-decoration: none; }
 .svc-section + .faq { padding-top: var(--section); }
+
+/* Service page hero with an arched photo */
+.page-hero-split .wrap { display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(32px, 5vw, 72px); align-items: center; }
+.page-hero-photo { margin: 0; position: relative; padding: 12px; width: 100%; max-width: 400px; justify-self: end; }
+.page-hero-photo::before { content: ""; position: absolute; inset: 0; border: 1px solid var(--gold); border-radius: 999px 999px 0 0; }
+.page-hero-photo img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 999px 999px 0 0; }
+.page-hero-photo-quince img { object-position: 42% 50%; }
+@media (max-width: 860px) {
+  .page-hero-split .wrap { grid-template-columns: 1fr; }
+  .page-hero-photo { justify-self: start; max-width: 300px; }
+}
+
+/* About Ana */
+.about-beliefs { padding: var(--section) 0; }
+.about-split { padding: var(--section) 0; }
+.about-split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 88px); }
+.about-split h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 12px; }
+.about-split p { color: #4a3350; max-width: 34em; }
+.about-split a { color: var(--rosa-deep); }
+@media (max-width: 760px) { .about-split-grid { grid-template-columns: 1fr; } }
+
+/* Reviews and gallery (render only when src/data has entries) */
+.reviews { padding: var(--section) 0; }
+.review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(24px, 4vw, 48px); margin-top: 40px; }
+.review { margin: 0; border-top: 1px solid var(--gold); padding-top: 24px; }
+.review blockquote { margin: 0 0 16px; font-family: var(--serif); font-size: 1.2rem; line-height: 1.5; color: var(--plum); }
+.review blockquote p { margin: 0; }
+.review-name { display: block; font-weight: 600; }
+.review-meta { display: block; color: var(--muted); font-size: .95rem; }
+.gallery { padding: var(--section) 0 0; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 32px; }
+.gallery-item { margin: 0; }
+.gallery-item img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }

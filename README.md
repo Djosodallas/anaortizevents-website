@@ -64,3 +64,28 @@ form offers a pre-filled mailto link instead. The email notes the event type
   `preview_urls` are off (the old `*.workers.dev` URL returns error 1042), and
   worker.js 301s any host other than `www.anaortiz.events` to it (localhost excepted).
 - Any future domain purchase or transfer for Ana goes into the djosito214 account.
+
+## Reviews and photo gallery
+
+Both are driven by JSON files and stay hidden until they have entries, so the site never shows an empty section.
+
+**Reviews:** `src/data/reviews.json`. Only real reviews, copied word for word with the family's permission (for example from Google or Facebook):
+
+```json
+[
+  { "name": "Maria G.", "event": "quinceanera", "source": "Google", "lang": "es", "text": "The review, exactly as written." }
+]
+```
+
+`event` is `wedding` or `quinceanera`. The home and About pages show every review; the Weddings and Quinceañeras pages show only their own.
+
+**Gallery:** put optimized `.webp` photos in `public/images/gallery/` and list them in `src/data/gallery.json`:
+
+```json
+[
+  { "src": "/images/gallery/quince-grand-entrance.webp", "width": 1200, "height": 1500, "event": "quinceanera",
+    "alt": { "en": "English description", "es": "Descripción en español" } }
+]
+```
+
+Photos appear on the Weddings or Quinceañeras page (both languages) above the FAQ. Use only photos from events Ana coordinated, and credit/clear them with the photographer.
