@@ -86,8 +86,8 @@ const BUSINESS = (lang) => ({
   alternateName: 'Ana Ortiz, Event Coordinator',
   description:
     lang === 'es'
-      ? 'Coordinadora del día para bodas y quince años en Dallas–Fort Worth, Texas. Manejo del itinerario, coordinación de proveedores, cortejo o corte de honor y hasta 6 horas de coordinación en el evento. Atiende en inglés y español.'
-      : 'Day-of wedding and quinceañera coordinator in Dallas–Fort Worth, Texas. Timeline management, vendor coordination, wedding party or court management and up to 6 hours of on-site coordination. Serves families in English and Spanish.',
+      ? 'Coordinadora del día para bodas y quince años en Dallas–Fort Worth, Texas. Manejo del itinerario, coordinación de proveedores, cortejo o corte de honor. Bodas con hasta 6 horas en el evento y tres colecciones de quince años (Esencial, Signature y Luxury de Día Completo) de 6 a 12 horas. Atiende en inglés y español.'
+      : 'Day-of wedding and quinceañera coordinator in Dallas–Fort Worth, Texas. Timeline management, vendor coordination, wedding party or court management. Weddings include up to 6 hours on site; quinceañeras come in three collections (Essential, Signature, Luxury Full-Day) with 6 to 12 hours. Serves families in English and Spanish.',
   url: `${SITE}/`,
   telephone: '+1-469-970-4473',
   email: 'anaortizevents@gmail.com',
@@ -223,8 +223,64 @@ function galleryBlock(lang, kind) {
     .join('\n');
   return `<section class="gallery"><div class="wrap"><h2 class="section-title">${RL[lang].gh[kind]}</h2><div class="gallery-grid">${items}</div></div></section>`;
 }
+// Quinceañera collections (src/data/quince-collections.json), placed with <!--@collections:quince-->.
+const COLLECTIONS = existsSync(join(root, 'src/data/quince-collections.json')) ? JSON.parse(read('src/data/quince-collections.json')) : null;
+function collectionsBlock(lang) {
+  if (!COLLECTIONS) return '';
+  const c = COLLECTIONS[lang];
+  const contact = lang === 'es' ? '/es/contacto#inquiry' : '/contact#inquiry';
+  const cards = c.items
+    .map(
+      (it) => `<article class="collection" id="${it.id}">
+  <p class="collection-hours">${it.upTo ? `<span class="collection-upto">${c.upTo}</span>` : ''}<span class="collection-num">${it.hours}</span><span class="collection-unit">${c.hoursWord}</span></p>
+  <h3>${esc(it.name)}</h3>
+  <p class="collection-scope">${esc(it.scope)}</p>
+  <p class="collection-desc">${esc(it.desc)}</p>
+  <p class="collection-label">${c.includes}</p>
+  <ul class="checks">${it.list.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>
+  <p class="collection-ideal"><strong>${c.ideal}:</strong> ${esc(it.ideal)}</p>
+  <a class="btn collection-btn" href="${contact}">${c.cta}</a>
+</article>`
+    )
+    .join('\n');
+  const addons = c.addons
+    .map((a) => `<li><span class="addon-name">${esc(a.name)}</span><span class="addon-price">${esc(a.price)}</span>${a.note ? `<span class="addon-note">${esc(a.note)}</span>` : ''}</li>`)
+    .join('');
+  return `<section class="collections" id="collections">
+<div class="wrap">
+  <h2 class="section-title">${esc(c.title)}</h2>
+  <div class="collections-intro">${c.intro.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
+  <div class="collection-grid">
+${cards}
+  </div>
+  <div class="collection-extras">
+    <div class="addons"><h3>${esc(c.addonsTitle)}</h3><ul>${addons}</ul></div>
+    <div class="collection-quote"><p>${esc(c.quote)}</p><a class="btn btn-light" href="${contact}">${esc(c.quoteCta)}</a><a class="price-phone" href="tel:+14699704473">${lang === 'es' ? 'o llama al' : 'or call'} 469-970-4473</a></div>
+  </div>
+  <div class="collection-closing"><h3>${esc(c.closingTitle)}</h3><p>${esc(c.closing)}</p></div>
+</div>
+</section>`;
+}
+// Schema.org OfferCatalog for the quinceañera Service (no base prices: those are quoted).
+const collectionsCatalog = (lang) => {
+  const c = COLLECTIONS[lang];
+  return {
+    '@type': 'OfferCatalog',
+    name: c.title,
+    itemListElement: [
+      ...c.items.map((it) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: it.name, description: `${it.upTo ? c.upTo + ' ' : ''}${it.hours} ${c.hoursWord}. ${it.scope} ${it.desc}` },
+      })),
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: c.addons[0].name }, priceSpecification: { '@type': 'UnitPriceSpecification', price: 85, priceCurrency: 'USD', unitCode: 'HUR' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: c.addons[1].name, description: c.addons[1].note }, price: 100, priceCurrency: 'USD' },
+    ],
+  };
+};
 const withBlocks = (html, lang) =>
   html
+    .replace(/<!--@collections:quince-->/g, () => collectionsBlock(lang))
+    .replace(/"@@quinceCatalog@@"/g, () => JSON.stringify(collectionsCatalog(lang)))
     .replace(/<!--@reviews:(\w+)-->/g, (_, k) => reviewsBlock(lang, k))
     .replace(/<!--@gallery:(\w+)-->/g, (_, k) => galleryBlock(lang, k));
 
@@ -454,7 +510,9 @@ const pageList = (lang, post) =>
     .join('\n');
 const llms = `# Ana Ortiz Events
 
-> Ana Ortiz is a day-of wedding and quinceañera coordinator serving the Dallas–Fort Worth metroplex in Texas, in English and Spanish. Families and couples plan and book their own vendors; Ana joins in the months before the event (unlimited communication, virtual planning meetings, venue walkthrough, design guidance, vendor recommendations and vendor management, a custom timeline and a final details meeting) and runs the day itself with up to 6 hours of on-site coordination. Pricing is quoted per event. Now booking 2026–2027.
+> Ana Ortiz is a day-of wedding and quinceañera coordinator serving the Dallas–Fort Worth metroplex in Texas, in English and Spanish. Families and couples plan and book their own vendors; Ana joins in the months before the event (unlimited communication, virtual planning meetings, venue walkthrough, design guidance, vendor recommendations and vendor management, a custom timeline and a final details meeting) and runs the day itself with up to 6 hours of on-site coordination for weddings.
+
+Quinceañeras come in three collections, each quoted for the date and venue: Essential (6 hours, reception coordination only, ceremony not included), Signature (8 hours, ceremony and reception, 2–3 planning meetings, venue walkthrough, custom timeline, vendor referrals, emergency kit) and Luxury Full-Day (up to 12 hours, unlimited communication, ceremony rehearsal, assistant coordinator, setup and breakdown help). Add-ons: additional hours $85 per hour; additional assistant coordinator $100, required for events of 250 or more guests. Details: ${SITE}/quinceaneras#collections. Now booking 2026–2027.
 
 Contact: call or text 469-970-4473, email anaortizevents@gmail.com, or use the form at ${SITE}/contact (Spanish: ${SITE}/es/contacto).
 Instagram: https://www.instagram.com/anaortiz_events/ · Facebook: https://www.facebook.com/anaortizevents

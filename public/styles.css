@@ -506,3 +506,49 @@ p { margin: 0 0 1em; }
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 32px; }
 .gallery-item { margin: 0; }
 .gallery-item img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* ---------- Quinceañera collections ---------- */
+.collections { padding: var(--section) 0; background: var(--blush); }
+.collections-intro { max-width: 70ch; margin: 16px 0 0; color: #4a3350; }
+.collections-intro p { margin: 0 0 12px; }
+.collection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; align-items: stretch; }
+.collection {
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid var(--line); border-radius: 200px 200px 16px 16px;
+  padding: 56px 28px 28px;
+}
+.collection-hours { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; min-height: 7.4rem; margin: 0 0 18px; text-align: center; }
+.collection-upto { font-size: .95rem; color: var(--muted); }
+.collection-num { font-family: var(--serif); font-size: 4.5rem; line-height: 1; color: var(--rosa-deep); }
+.collection-unit { font-size: .95rem; color: var(--muted); margin-top: 4px; }
+.collection h3 { font-size: 1.55rem; text-align: center; margin: 0 0 6px; padding-top: 18px; border-top: 1px solid var(--gold); }
+.collection-scope { text-align: center; font-weight: 600; color: var(--rosa-deep); margin: 0 0 16px; }
+.collection-desc { color: #4a3350; margin: 0 0 18px; }
+.collection-label { font-weight: 600; margin: 0; }
+.collection .checks { margin-top: 12px; gap: 9px; }
+.collection-ideal { margin: 20px 0 22px; padding-top: 16px; border-top: 1px solid var(--line); color: #4a3350; font-size: .95rem; }
+.collection-btn { margin-top: auto; width: 100%; text-align: center; }
+.collection#luxury { background: var(--plum); border-color: var(--plum); color: #fff; }
+.collection#luxury .collection-num { color: var(--gold-soft); }
+.collection#luxury .collection-upto, .collection#luxury .collection-unit, .collection#luxury .collection-desc, .collection#luxury .collection-ideal { color: #f1e3ea; }
+.collection#luxury .collection-scope { color: var(--gold-soft); }
+.collection#luxury .collection-ideal { border-top-color: rgba(233,211,166,.35); }
+.collection#luxury .checks li::before { background: var(--gold-soft); }
+.collection-extras { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-top: 24px; }
+.addons { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 28px; }
+.addons h3 { font-size: 1.35rem; margin: 0 0 12px; }
+.addons ul { list-style: none; margin: 0; padding: 0; }
+.addons li { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+.addon-name { font-weight: 600; }
+.addon-price { font-family: var(--serif); font-size: 1.35rem; color: var(--rosa-deep); text-align: right; }
+.addon-note { grid-column: 1 / -1; color: var(--muted); font-size: .95rem; }
+.collection-quote { background: var(--plum); color: #fff; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.collection-quote p { font-family: var(--serif); font-size: 1.35rem; margin: 0 0 16px; }
+.collection-quote .btn { width: 100%; }
+.collection-closing { max-width: 70ch; margin: 56px auto 0; text-align: center; }
+.collection-closing h3 { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 12px; }
+.collection-closing p { color: #4a3350; margin: 0; }
+@media (max-width: 980px) {
+  .collection-grid { grid-template-columns: 1fr; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .collection-extras { grid-template-columns: 1fr; max-width: 520px; margin-left: auto; margin-right: auto; }
+}

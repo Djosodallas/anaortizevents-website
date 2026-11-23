@@ -1,0 +1,156 @@
+{
+  "en": {
+    "title": "Quinceañera coordination collections",
+    "intro": [
+      "Every quinceañera deserves to be celebrated beautifully, without the stress of managing every detail. This milestone is about more than a party: it’s about family, traditions and memories you’ll keep for the rest of your life.",
+      "Each collection gives your family professional guidance, organization and support on her day, from vendors and the timeline to the traditions and special moments, in English and Spanish."
+    ],
+    "hoursWord": "hours of coverage",
+    "upTo": "Up to",
+    "includes": "Your collection includes",
+    "ideal": "Ideal for",
+    "cta": "Ask about this collection",
+    "items": [
+      {
+        "id": "essential",
+        "name": "Essential Collection",
+        "hours": 6,
+        "scope": "Reception coordination. Ceremony not included.",
+        "desc": "For families who have finished planning and want a professional to run the reception. Ana handles the behind-the-scenes details, vendor communication and reception flow, so your family can relax and enjoy the celebration without wondering what happens next.",
+        "list": [
+          "Timeline review and refinement for the reception",
+          "Vendor confirmations before the event",
+          "Coordination with the DJ or MC and event vendors",
+          "Reception flow and schedule management",
+          "Point of contact for your family and vendors"
+        ],
+        "ideal": "Families who have organized their celebration and need a dedicated professional to oversee the reception and keep it running smoothly."
+      },
+      {
+        "id": "signature",
+        "name": "Signature Collection",
+        "hours": 8,
+        "scope": "Ceremony and reception coordination.",
+        "desc": "More planning support and full coordination for families who want a hands-on experience. Ana works closely with your family and vendors before the event so everyone knows the schedule and their role, with special attention to the transitions and traditions that make her quince unique.",
+        "list": [
+          "Everything in the Essential Collection",
+          "2–3 planning meetings",
+          "Custom event timeline for the ceremony and reception",
+          "Venue walkthrough",
+          "Help with vendor communication",
+          "Ceremony and reception coordination",
+          "Dedicated point of contact for your family and vendors",
+          "Trusted vendor referrals",
+          "Emergency kit"
+        ],
+        "ideal": "Families who want more guidance, planning support and professional coordination from the ceremony through the reception."
+      },
+      {
+        "id": "luxury",
+        "name": "Luxury Full-Day Collection",
+        "hours": 12,
+        "upTo": true,
+        "scope": "Ana’s most complete coordination.",
+        "desc": "Extended coordination and extra hands for families who want the highest level of attention. From the ceremony rehearsal to the last dance, Ana and an assistant coordinator manage the details, traditions, transitions and logistics so the whole day runs smoothly for everyone.",
+        "list": [
+          "Everything in the Signature Collection",
+          "Unlimited communication",
+          "Ceremony rehearsal coordination",
+          "Assistant coordinator included",
+          "Setup and breakdown help, within the agreed scope",
+          "Detailed coordination of traditions and transitions",
+          "Extended event support",
+          "Family and vendor management",
+          "Emergency kit"
+        ],
+        "ideal": "Families who want complete coordination, extended coverage and extra hands-on help throughout the quinceañera."
+      }
+    ],
+    "addonsTitle": "Add to any collection",
+    "addons": [
+      { "name": "Additional hours", "price": "$85 per hour" },
+      { "name": "Additional assistant coordinator", "price": "$100", "note": "Required for events with 250 or more guests" }
+    ],
+    "quote": "Each collection is quoted for your date and venue.",
+    "quoteCta": "Get my quote",
+    "closingTitle": "You enjoy the moment. Ana handles the details.",
+    "closing": "Ana is your advocate, your organizer and your point of contact for the whole celebration. She works behind the scenes to keep things organized, talk with vendors, guide family members and make sure the important moments get the attention they deserve. These memories only happen once, and you deserve to enjoy them."
+  },
+  "es": {
+    "title": "Colecciones de coordinación de quince años",
+    "intro": [
+      "Cada quinceañera merece celebrarse en grande, sin el estrés de estar al pendiente de cada detalle. Este momento es mucho más que una fiesta: es la familia, las tradiciones y recuerdos que van a guardar toda la vida.",
+      "Cada colección le da a su familia orientación profesional, organización y apoyo el día de los quince, desde los proveedores y el itinerario hasta las tradiciones y los momentos especiales, en español y en inglés."
+    ],
+    "hoursWord": "horas de cobertura",
+    "upTo": "Hasta",
+    "includes": "Su colección incluye",
+    "ideal": "Ideal para",
+    "cta": "Preguntar por esta colección",
+    "items": [
+      {
+        "id": "essential",
+        "name": "Colección Esencial",
+        "hours": 6,
+        "scope": "Coordinación de la recepción. No incluye la ceremonia.",
+        "desc": "Para las familias que ya terminaron de planear y quieren a una profesional que dirija la recepción. Ana se encarga de los detalles detrás de escena, la comunicación con los proveedores y el ritmo de la fiesta, para que su familia se relaje y disfrute sin preocuparse por lo que sigue.",
+        "list": [
+          "Revisión y ajuste del itinerario de la recepción",
+          "Confirmación con los proveedores antes del evento",
+          "Coordinación con el DJ o maestro de ceremonias y los proveedores",
+          "Manejo del ritmo y el horario de la recepción",
+          "Persona de contacto para la familia y los proveedores"
+        ],
+        "ideal": "Familias que ya organizaron su celebración y necesitan a una profesional dedicada que supervise la recepción y la mantenga en orden."
+      },
+      {
+        "id": "signature",
+        "name": "Colección Signature",
+        "hours": 8,
+        "scope": "Coordinación de la ceremonia y la recepción.",
+        "desc": "Más apoyo de planeación y coordinación completa para las familias que quieren un acompañamiento cercano. Ana trabaja con su familia y sus proveedores antes del evento para que todos conozcan el horario y su papel, con especial atención a las transiciones y las tradiciones que hacen únicos sus quince.",
+        "list": [
+          "Todo lo de la Colección Esencial",
+          "2 a 3 juntas de planeación",
+          "Itinerario personalizado de la ceremonia y la recepción",
+          "Recorrido por el salón",
+          "Apoyo en la comunicación con los proveedores",
+          "Coordinación de la ceremonia y la recepción",
+          "Persona de contacto dedicada para la familia y los proveedores",
+          "Recomendaciones de proveedores de confianza",
+          "Kit de emergencia"
+        ],
+        "ideal": "Familias que quieren más orientación, apoyo de planeación y coordinación profesional desde la ceremonia hasta la recepción."
+      },
+      {
+        "id": "luxury",
+        "name": "Colección Luxury de Día Completo",
+        "hours": 12,
+        "upTo": true,
+        "scope": "La coordinación más completa de Ana.",
+        "desc": "Coordinación extendida y manos extra para las familias que buscan el mayor nivel de atención. Desde el ensayo de la ceremonia hasta el último baile, Ana y una coordinadora asistente manejan los detalles, las tradiciones, las transiciones y la logística para que todo el día fluya para todos.",
+        "list": [
+          "Todo lo de la Colección Signature",
+          "Comunicación ilimitada",
+          "Coordinación del ensayo de la ceremonia",
+          "Coordinadora asistente incluida",
+          "Apoyo con el montaje y el desmontaje, según lo acordado",
+          "Coordinación detallada de las tradiciones y las transiciones",
+          "Apoyo extendido durante el evento",
+          "Manejo de la familia y los proveedores",
+          "Kit de emergencia"
+        ],
+        "ideal": "Familias que buscan una coordinación completa, más horas de cobertura y apoyo extra durante toda la celebración."
+      }
+    ],
+    "addonsTitle": "Agregue a cualquier colección",
+    "addons": [
+      { "name": "Horas adicionales", "price": "$85 por hora" },
+      { "name": "Coordinadora asistente adicional", "price": "$100", "note": "Necesaria para eventos de 250 invitados o más" }
+    ],
+    "quote": "Cada colección se cotiza según su fecha y su salón.",
+    "quoteCta": "Pedir mi cotización",
+    "closingTitle": "Ustedes disfrutan el momento. Ana se encarga de los detalles.",
+    "closing": "Ana es su aliada, su organizadora y su persona de contacto durante toda la celebración. Trabaja detrás de escena para mantener todo en orden, hablar con los proveedores, guiar a la familia y asegurarse de que cada momento importante reciba la atención que merece. Estos recuerdos solo pasan una vez, y ustedes merecen disfrutarlos."
+  }
+}
